@@ -1,6 +1,4 @@
 {
-  "version": "1.0.0",
-  "name": "deleta_arquivos",
   "imports": {
     "dist/": "./dist/",
     "exists": "https://deno.land/std@0.217.0/fs/exists.ts",
@@ -13,9 +11,11 @@
   "tasks": {
     "start": "deno run -A  src/main.ts",
     "build": " deno compile --output ./dist/deleta-arquivos/deleta-arquivos -A src/main.ts ",
-    "dev": " deno run -A --watch --unsafely-ignore-certificate-errors ./src/main.ts",
+    "dev": " deno run -A --watch --unsafely-ignore-certificate-errors ./src/main/main.ts",
+    "server": " deno run -A --watch ./src/main/server.ts",
     "lint": " deno lint ",
-    "fmt": "deno fmt  --watch"
+    "fmt": "deno fmt  --watch",
+    "cache": "deno cache --reload https://deno.land/x/tcp_socket@0.0.1/mods.ts"
   },
   "unstable": [""],
   "importMap": "./import_map.json",
@@ -44,5 +44,6 @@
     "allowJs": true,
     "lib": ["deno.window"],
     "strict": true
-  }
+  },
+  "name": "deleta_arquivos"
 }

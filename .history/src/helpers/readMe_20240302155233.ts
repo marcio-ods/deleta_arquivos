@@ -1,10 +1,9 @@
 import { appLog } from "@/src/helpers/AppLog.ts";
 import { exists } from 'exists';
 
-// const logsPath = "dir_tests"
-const logsPath = "AppData\\\\Local\\\\[AppName]\\\\Logs "
-// const usersPath = "C:\\\\dev\\\\deleta_arquivos"
-const usersPath = "C:\\\\users"
+const logsDir = ""
+const usersDir = "C:\\dev\\deleta_arquivos"
+// const usersDir = "C:\\users"
 
 export async function readMe() {
     try {
@@ -13,15 +12,15 @@ export async function readMe() {
         if (!isFile)
             await Deno.writeTextFile(file, `
             Configuração padrão:
-            --users-path=${usersPath} --user-name=all --logs-path=${logsPath} --sleep=0 --days=30
+            --users-path=c:\\Users --user-name=all --logs-path=AppData\\Local\\Regula\\Logs --sleep=0 --days=30
 
                                         exemplos de configurações flags
 
             remoto:
-            --users-path=172.0.0.1\\\\c$\\\\Users
+            --users-path=172.0.0.1\\c$\\Users
 
             Caminho da pasta do(s) arquivo(s) 
-            --logs-path=${logsPath}
+            --logs-path=AppData\\Local\\Regula\\Logs
 
             usuário expecifico:
             --user-name=fulano

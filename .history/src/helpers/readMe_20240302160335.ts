@@ -2,7 +2,7 @@ import { appLog } from "@/src/helpers/AppLog.ts";
 import { exists } from 'exists';
 
 // const logsPath = "dir_tests"
-const logsPath = "AppData\\\\Local\\\\[AppName]\\\\Logs "
+const logsPath = "AppData\\\\Local\\\\[NameApp]\\\\Logs "
 // const usersPath = "C:\\\\dev\\\\deleta_arquivos"
 const usersPath = "C:\\\\users"
 

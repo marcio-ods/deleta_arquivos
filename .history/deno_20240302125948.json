@@ -1,6 +1,4 @@
 {
-  "version": "1.0.0",
-  "name": "deleta_arquivos",
   "imports": {
     "dist/": "./dist/",
     "exists": "https://deno.land/std@0.217.0/fs/exists.ts",
@@ -44,5 +42,6 @@
     "allowJs": true,
     "lib": ["deno.window"],
     "strict": true
-  }
+  },
+  "name": "deleta_arquivos"
 }
