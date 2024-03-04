@@ -1,19 +1,20 @@
 import { CONFIG_ARGS } from '@/src/helpers/appType.ts';
 import { appLog } from '@/src/helpers/AppLog.ts';
 import { readMe } from '@/src/helpers/readMe.ts';
-import { config } from '@/src/helpers/SetupState.ts';
+import { config } from './AppState.ts';
 import { reassemblePath } from '@/src/helpers/reassemblePath.ts';
 import { addDays } from '@/src/helpers/date.ts';
+import { setSleep } from '@/src/helpers/initSetup/setSleep.ts';
 
-const userName = (v?: string) => {
-    v = v?.trim();
-    if (!v) return;
-    config.set({ userName: v });
-};
+// const userName = (v: string) => {
+//     if (v) return config.set({ userName: v });
+//     config.set({ userName: 'all' });
+// };
 
-const usersPath = (v?: string) => {
+const usersPath = (v: string) => {
     // 'c:\\Users'  |  \\172.0.0.1\c$\...
-    v = v?.trim() || '';
+    v = v.trim();
+    if (!v) return config.set({ usersPath: "c:\\Users" });
     if (v.includes(':')) {
         config.set({ usersPath: reassemblePath(v) });
     } else if (v.includes('$')) {
@@ -23,7 +24,7 @@ const usersPath = (v?: string) => {
     }
 };
 
-const days = (v?: string, date?: string) => {
+const days = (v: string, date?: string) => {
     const is_NaN = (n: number) => isNaN(n) ? config.get().days : n;
 
     const current = date?.trim()
@@ -39,61 +40,54 @@ const days = (v?: string, date?: string) => {
 };
 
 
-const sleep = (v?: string) => {
-    type SLEEP = ['s' | 'm' | 'h', number];
-    // segundos = milissegundos / 1000
-    v = v?.trim() ? v.trim().toLocaleLowerCase() : '';
-    if (!v) return;
 
-    let d = ['s', 0] as SLEEP;
+const filesPath = (v?: string) => {
+    v = v?.trim();
+    if (!v) return config.set({ filesPath: "" });
+    config.set({ filesPath: reassemblePath(v) })
 
-    if (v.includes('-')) {
-        d = v.split('-') as SLEEP;
-    } else {
-        d = ['s', Number(v)] as SLEEP;
-    }
-
-    if (isNaN(d[1])) return;
-
-    switch (d[0]) {
-        case "m":
-            return config.set({ sleep: (d[1] * 1000) * 60 })
-        case "h":
-            return config.set({ sleep: ((d[1] * 1000) * 60) * 60 })
-        default: // s
-            return config.set({ sleep: (d[1] * 1000) })
-    }
-
+    // if (v) config.set({ filesPath: reassemblePath(v) });
+    // else {
+    //     config.set({ filesPath: reassemblePath(config.get().filesPath) });
+    // }
 };
 
-const logsPath = (v?: string) => {
+const fullPath = (v?: string) => {
+    // 'c:\\Users'  |  \\172.0.0.1\c$\...
     v = v?.trim() || '';
-    if (v) config.set({ logsPath: reassemblePath(v) });
-    else {
-        config.set({ logsPath: reassemblePath(config.get().logsPath) });
+    if (!v) return config.set({ fullPath: "" })
+
+    if (v.includes(':')) {
+        config.set({ fullPath: reassemblePath(v) });
+    } else if (v.includes('$')) {
+        config.set({ fullPath: '\\\\' + reassemblePath(v) });
+    } else {
+        config.set({ fullPath: reassemblePath(config.get().fullPath) });
     }
 };
+
 
 export async function initSetup(v: CONFIG_ARGS) {
     const setLog = () => {
-        appLog.set(`userName: ${config.get().userName}`);
-        appLog.set(`usersPath: ${config.get().usersPath}`);
-        appLog.set(`logsPath: ${config.get().logsPath}`);
+        // appLog().set(`userName: ${config.get().userName}`);
+        appLog().set(`usersPath: ${config.get().usersPath}`);
+        appLog().set(`filesPath: ${config.get().filesPath}`);
     };
 
     try {
-        userName(v.userName);
+        // userName(v.userName);
         usersPath(v.usersPath);
         days(v.days, v.date);
-        sleep(v.sleep);
-        logsPath(v.logsPath);
+        await setSleep(v.sleep);
+        filesPath(v.filesPath);
+        fullPath(v.fullPath);
         setLog();
         await readMe();
         // console.log(config.get());
     } catch (error) {
         setLog();
         console.log(error.message);
-        appLog.set(error.message);
+        appLog().set(error.message);
         await Deno.writeTextFile(
             `${Deno.cwd()}//config.txt`,
             'Diretório não encontrado',

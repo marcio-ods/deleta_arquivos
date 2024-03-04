@@ -2,5 +2,7 @@ dist
 readme.txt
 dir_tests
 docs
-history
 *.txt
+.history
+fake_user
+rootFakeDelete

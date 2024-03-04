@@ -9,7 +9,6 @@
     "datetime": "https://deno.land/std@0.218.2/datetime/mod.ts",
     "@/": "./"
   },
-  "scopes": {},
   "tasks": {
     "start": "deno run -A  src/main.ts",
     "build": " deno compile --output ./dist/deleta-arquivos/deleta-arquivos -A src/main.ts ",

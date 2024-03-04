@@ -1,8 +1,8 @@
 import { appLog } from '@/src/helpers/AppLog.ts';
 import { exists } from 'exists';
 
-const logsPath = 'logs';
-// const logsPath = "AppData\\\\Local\\\\[AppName]\\\\Logs "
+const filesPath = 'logs';
+// const filesPath = "AppData\\\\Local\\\\[AppName]\\\\Logs "
 const usersPath = `${Deno.cwd()}\\\\fake_user`;
 // const usersPath = "C:\\\\users"
 
@@ -15,7 +15,7 @@ export async function readMe() {
                 file,
                 `
             Configuração padrão:
-            --users-path=${usersPath} --user-name=all --logs-path=${logsPath} --sleep=0 --days=30
+            --users-path=${usersPath} --user-name=all --logs-path=${filesPath} --sleep=0 --days=30
 
                                         exemplos de configurações flags
 
@@ -23,7 +23,7 @@ export async function readMe() {
             --users-path=172.0.0.1\\\\c$\\\\Users
 
             Caminho da pasta do(s) arquivo(s) 
-            --logs-path=${logsPath}
+            --logs-path=${filesPath}
 
             usuário específico:
             --user-name=fulano
@@ -36,10 +36,10 @@ export async function readMe() {
             se não informar o tipo é contado em segundos --sleep=100 -> 100 segundos
             `,
             );
-            appLog.set("arquivo tutorial criado" + file);
+            appLog().set("arquivo tutorial criado" + file);
         }
     } catch (error) {
         console.log(error.message);
-        appLog.set(error.message);
+        appLog().set(error.message);
     }
 }
