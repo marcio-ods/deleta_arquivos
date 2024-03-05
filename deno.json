@@ -6,7 +6,7 @@
     "exists": "https://deno.land/std@0.217.0/fs/exists.ts",
     "parse_args": "https://deno.land/std@0.207.0/cli/parse_args.ts",
     "assert": "https://deno.land/std@0.218.0/assert/mod.ts",
-    "datetime": "https://deno.land/std@0.218.2/datetime/mod.ts",
+    "colors": "https://deno.land/std@0.218.2/fmt/colors.ts",
     "@/": "./"
   },
   "tasks": {

@@ -41,41 +41,31 @@ const days = (v: string, date?: string) => {
 
 
 
-const filesPath = (v?: string) => {
-    v = v?.trim();
+const filesPath = (v: string) => {
     if (!v) return config.set({ filesPath: "" });
     config.set({ filesPath: reassemblePath(v) })
-
-    // if (v) config.set({ filesPath: reassemblePath(v) });
-    // else {
-    //     config.set({ filesPath: reassemblePath(config.get().filesPath) });
-    // }
 };
 
-const fullPath = (v?: string) => {
+const fullPath = (v: string) => {
     // 'c:\\Users'  |  \\172.0.0.1\c$\...
-    v = v?.trim() || '';
-    if (!v) return config.set({ fullPath: "" })
+    if (!v) return config.set({ fullPath: "" });
 
-    if (v.includes(':')) {
-        config.set({ fullPath: reassemblePath(v) });
-    } else if (v.includes('$')) {
-        config.set({ fullPath: '\\\\' + reassemblePath(v) });
-    } else {
-        config.set({ fullPath: reassemblePath(config.get().fullPath) });
-    }
+    if (v.includes(':'))
+        return config.set({ fullPath: reassemblePath(v) });
+
+    if (v.includes('$'))
+        return config.set({ fullPath: '\\\\' + reassemblePath(v) });
 };
 
 
 export async function initSetup(v: CONFIG_ARGS) {
     const setLog = () => {
-        // appLog().set(`userName: ${config.get().userName}`);
         appLog().set(`usersPath: ${config.get().usersPath}`);
         appLog().set(`filesPath: ${config.get().filesPath}`);
+        appLog().set(`fullPath: ${config.get().fullPath}`);
     };
 
     try {
-        // userName(v.userName);
         usersPath(v.usersPath);
         days(v.days, v.date);
         await setSleep(v.sleep);

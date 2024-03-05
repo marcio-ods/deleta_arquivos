@@ -1,6 +1,7 @@
 
 import { sleep } from '@/src/helpers/sleep.ts';
 import { config } from './AppState.ts';
+import { green, red } from "colors";
 const date = new Date();
 type STATUS = "Alerta" | "Erro" | "Sucesso"
 
@@ -41,7 +42,10 @@ class AppLog {
 	}
 	async exit({ msg = '', st = <STATUS>"Sucesso", name = 'logs' }) {
 		this.set(msg, st);
-		console.log(msg);
+		if (st === "Erro")
+			console.log(red(st) + ' ' + msg);
+		else
+			console.log(green(st) + " " + msg);
 
 		if (config.get().appTest) return await this.write({ add: true });
 		await this.write({ name });
@@ -49,6 +53,7 @@ class AppLog {
 		Deno.exit();
 	}
 }
+// deno task start --users-path=C:\dev\deleta_arquivos  --files-path=fake_user  --full-path=  --sleep=s-0 --days=5 
 
 let UNIQUE: undefined | AppLog = undefined
 

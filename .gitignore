@@ -1,8 +1,10 @@
 dist
 readme.txt
+leiame.txt
 dir_tests
 docs
 *.txt
 .history
 fake_user
 rootFakeDelete
+fake_user copy

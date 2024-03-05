@@ -6,6 +6,7 @@ class AppState {
 		filesPath: "",//`AppData\\Local\\[App]\\Logs`,
 		days: 30,
 		sleep: 0,
+		fullPath: "",
 		numberOfDir: 0,
 		numberOfDeletedFiles: 0,
 	};

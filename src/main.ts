@@ -1,46 +1,52 @@
 import { initSetup } from '@/src/helpers/initSetup.ts';
-import { config } from './helpers/AppState.ts';
-import { listUserDir } from '@/src/helpers/listUserDir.ts';
+import { config } from "@/src/helpers/AppState.ts";
 import { appLog } from '@/src/helpers/AppLog.ts';
-import { deleteFiles } from './helpers/deleteFile.ts';
-import { listFiles } from './helpers/listAndDeleteFiles.ts';
-import { exists } from 'exists';
 import { getFlags } from '@/src/helpers/getFlags.ts';
 import { sleep } from '@/src/helpers/sleep.ts';
 import { validPath } from '@/src/helpers/validPath.ts';
+import { listRootFiles } from '@/src/helpers/listRootFiles.ts';
+import { listAndDeleteFiles } from '@/src/helpers/listAndDeleteFiles.ts';
+// deno task start --users-path=C:\\dev\\deleta_arquivos\\fake_user  --files-path=logs   --sleep=s-0 --days=5 
 
+// deno task start --users-path=C:\dev\deleta_arquivos  --files-path=fake_user  --full-path=C:\\dev\\deleta_arquivos\\fake_user  --sleep=s-0 --days=5 
+
+// {
+// fullPath: "C:\\dev\\deleta_arquivos\\fake_user\\us1\\logs" 
+// 	userDir: "C:\\dev\\deleta_arquivos\\fake_user",
+// 	filesDir: "\\logs",
+// 	users: [ "us1", "us2", "us3", "dir_tests" ]
+//   }
+
+
+// deno task start --users-path=C:\\dev\\deleta_arquivos\\fake_user  --files-path=logs   --sleep=s-1 --days=-1
 const main = async () => {
 	await initSetup(getFlags());
+	appLog().set(`atraso ${config.get().sleep}`)
 	await sleep(config.get().sleep);
+	appLog().set(`inicio`)
+	console.log(config.get());
 	await validPath()
-	// console.log(config.get());
 
 	// throw new Error("Falta altear o nome do log pra cada usuario")
 
 	try {
-		const users = await listUserDir();
+		let users = await listRootFiles();
+		users = Array.isArray(users) ? users : [users]
 
-		for await (const u of users) {
-			const dir =
-				`${config.get().usersPath}\\${u}\\${config.get().filesPath}`;
-			if (await exists(dir)) {
-				// console.log(dir);
-				const listLogs = await listFiles(dir);
-				// console.log(listLogs);
-				await deleteFiles(dir, listLogs, u);
-			}
-		}
+		console.log(users);
+		await listAndDeleteFiles(users)
+
 	} catch (error) {
 		console.log(error.message);
 		appLog().set(
 			`total: usuários: ${config.get().numberOfDir} | Arquivos deletados: ${config.get().numberOfDeletedFiles}`,
 		);
-		await appLog().exit(error.message);
+		await appLog().exit({ msg: error.message, st: "Erro" });
 	}
 
-	await appLog().exit(
-		`total: usuários: ${config.get().numberOfDir} | Arquivos deletados: ${config.get().numberOfDeletedFiles}`,
-	);
+	await appLog().exit({
+		msg: `total: usuários: ${config.get().numberOfDir} | Arquivos deletados: ${config.get().numberOfDeletedFiles}`
+	});
 };
 
 main();

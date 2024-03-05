@@ -89,15 +89,19 @@ Deno.test('initSetup sleep test', async () => {
     assertEquals(config.get().sleep, 85 * 1000 * 60 * 60);
 });
 
-// Deno.test('initSetup fullPath test', async () => {
-//     assertEquals(config.get().fullPath, "");
+Deno.test('initSetup fullPath test', async () => {
+    assertEquals(config.get().fullPath, "");
 
-//     await initSetup({ fullPath: undefined });
-//     assertEquals(config.get().fullPath, "");
+    await initSetup(getTestArgs({ fullPath: undefined }));
+    assertEquals(config.get().fullPath, "");
 
-//     await initSetup({ fullPath: 'C:\\dev\\deleta_arquivos\\dir_tests\\1' });
-//     assertEquals(config.get().fullPath, 'C:\\dev\\deleta_arquivos\\dir_tests\\1');
+    await initSetup(getTestArgs({ fullPath: '' }));
+    assertEquals(config.get().fullPath, "");
 
-//     await initSetup({ fullPath: '172.0.0.1\\d$\\dev\\deleta_arquivos\\dir_tests\\1' });
-//     assertEquals(config.get().fullPath, '\\\\172.0.0.1\\d$\\dev\\deleta_arquivos\\dir_tests\\1');
-// });
+    await initSetup(getTestArgs({ fullPath: '172.0.0.1\\d$\\dev\\deleta_arquivos\\dir_tests\\1' }));
+    assertEquals(config.get().fullPath, '\\\\172.0.0.1\\d$\\dev\\deleta_arquivos\\dir_tests\\1');
+
+    await initSetup(getTestArgs({ fullPath: 'C:\\dev\\deleta_arquivos\\dir_tests\\1' }));
+    assertEquals(config.get().fullPath, 'C:\\dev\\deleta_arquivos\\dir_tests\\1');
+
+});
